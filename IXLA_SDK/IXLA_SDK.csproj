@@ -178,6 +178,7 @@
     <Compile Include="Protocol\Commands\Vision\PerformXyAutoPositionResponse.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Sjf\abd.SJF" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
