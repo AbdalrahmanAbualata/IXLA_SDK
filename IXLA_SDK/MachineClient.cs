@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IXLA.Sdk.Xp24.Protocol.Commands.Transport;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -122,25 +123,34 @@ namespace IXLA.Sdk.Xp24
                 var payload = command.Serialize();
                 await _writer.WriteLineAsync(payload).ConfigureAwait(false);
 
+                // eject if any error occur
+                var payloadEject = new EjectCommand().Serialize();
+
                 // wait command valid=true/false from the server
                 using var ackXmlReader = await WaitAck();
                 // instantiate the response object
                 var response = (TResponse)Activator.CreateInstance(typeof(TResponse), command);
 
                 // if this throws is a bug (response object with wrong constructor) 
-                if (response is null) throw new Exception($"Failed to create response object via reflection for type {typeof(TResponse).Name}");
+                if (response is null) {
+                    await _writer.WriteLineAsync(payloadEject).ConfigureAwait(false);//new added for eject passport if error occur
+                    throw new Exception($"Failed to create response object via reflection for type {typeof(TResponse).Name}"); }
 
                 // populate response properties
                 response.Hydrate(ackXmlReader, true);
                 // if the server returns valid=false then we will not receive further messages 
-                if (!response.Valid) throw new Exception($"Invalid command. Error message: {response.Error}");
+                if (!response.Valid) {
+                    await _writer.WriteLineAsync(payloadEject).ConfigureAwait(false);//new added for eject passport if error occur
+                    throw new Exception($"Invalid command. Error message: {response.Error}"); }
                 if (!command.IsAsync) return response;
 
                 using var executionXmlReader = await WaitCompletion(timeout).ConfigureAwait(false);
 
                 // for async commands usually the second response (executed true/false) carries also date
                 response.Hydrate(executionXmlReader, false);
-                if (!response.Executed) throw new Exception($"Failed to execute command {command.Name}. Error message: {command.Name}");
+                if (!response.Executed) {
+                    await _writer.WriteLineAsync(payloadEject).ConfigureAwait(false);//new added for eject passport if error occur
+                    throw new Exception($"Failed to execute command {command.Name}. Error message: {command.Name}"); }
 
                 return response;
             }

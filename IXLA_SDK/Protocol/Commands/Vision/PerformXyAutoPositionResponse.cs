@@ -20,7 +20,7 @@ namespace IXLA.Sdk.Xp24.Protocol.Commands.Vision
 
             if (!string.IsNullOrEmpty(offsetX)) XOffset = double.Parse(offsetX);
             if (!string.IsNullOrEmpty(offsetY)) YOffset = double.Parse(offsetY);
-            if (!string.IsNullOrEmpty(correlation)) Correlation = int.Parse(correlation);
+            //if (!string.IsNullOrEmpty(correlation)) Correlation = int.Parse(correlation); // we faced a problem with that when its on
         }
     }
 }

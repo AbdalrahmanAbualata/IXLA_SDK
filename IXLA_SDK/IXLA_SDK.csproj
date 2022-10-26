@@ -178,7 +178,6 @@
     <Compile Include="Protocol\Commands\Vision\PerformXyAutoPositionResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Sjf\abd.SJF" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -205,11 +204,10 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63871</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44396/</IISUrl>
+          <IISUrl>http://localhost:63871/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <CustomServerUrl>http://10.130.149.200/</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
